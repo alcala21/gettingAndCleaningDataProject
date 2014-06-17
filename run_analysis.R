@@ -5,7 +5,7 @@ trainFiles <- c('X_train','subject_train', 'y_train')
 testFiles <- c('X_test','subject_test', 'y_test')
 
 
-# Load and merge all data from the text files in the train and test folders
+# # Load and merge all train and test files
 merge_similar_data <- function(fileNames) {
 	fileName <- paste0(fileNames[1],'.txt')
 	subset1 <- read.table(fileName, stringsAsFactors = FALSE)

@@ -6,7 +6,7 @@ Course Project for Getting and Cleaning Data
 The tidy set obtained with run_analysis.R contains the following column names: subject, activity, source, acceleration.type, calculated.signal, signal.domain, axis, mean, and std. The description and possible values for each columns are
 
 - **subject**  
-	Shows the Id of the person that performs an given activity. The possible values for this variable are 
+	Shows the Id of the person that performs a given activity. The possible values for this variable are 
 	+ 1
 	+ 2
 	+ 3	
@@ -33,9 +33,9 @@ The tidy set obtained with run_analysis.R contains the following column names: s
 	+ Gravity
 
 - **calculated.signal**  
-	This variable shows if a signal is calculated, and what kind of calculated signal it is. The possible values are
+	This variable shows if a signal is calculated, and what kind of calculated signal is. The possible values are
 	+ None - No calculation was performed
-	+ Jerk.Vector - The Jerk vector was calculated
+	+ Jerk.Vector - The jerk vector was calculated
 	+ Vector.Magnitude - The magnitude of the three-dimensional signals calculated using the Euclidean norm
 	+ Jerk.Vector.Magnitude - The magnitude of the jerk vector was calculated using the Euclidean norm.
 
@@ -49,7 +49,7 @@ The tidy set obtained with run_analysis.R contains the following column names: s
 	+ X
 	+ Y
 	+ Z
-	+ NA. These values appear when we select a vector magnitude from the calculated.signal column.
+	+ NA. These values appear when we select a vector magnitude from the calculated signal column.
 
 - **mean**  
 	Shows the mean value of the measurements. This is an average value for each activity and subject.  
@@ -57,9 +57,9 @@ The tidy set obtained with run_analysis.R contains the following column names: s
 - **std**  
 	Shows the standard deviation of the measurements. This is an average value for each activity and subject.
 
-# Calculation of the set *tidySet*
+# Building of *tidySet*
 
-First we have to merge the training and data sets in order to create one set. The training and test files in the working directory as run_analysis.R. The following code was used to merge the training and test files.
+First we have to merge the training and data sets in order to create one set. The training and test files are in the same working directory as run_analysis.R. The following code was used to merge the training and test files.
 
 
 ```r
@@ -68,7 +68,7 @@ trainFiles <- c('X_train','subject_train', 'y_train')
 testFiles <- c('X_test','subject_test', 'y_test')
 
 
-# Load and merge all data from the text files in the train and test folders
+# Load and merge all train and test files
 merge_similar_data <- function(fileNames) {
 	fileName <- paste0(fileNames[1],'.txt')
 	subset1 <- read.table(fileName, stringsAsFactors = FALSE)
@@ -85,7 +85,7 @@ set1 <- rbind(merge_similar_data(trainFiles),
 	merge_similar_data(testFiles))
 ```
 
-After creating the set with the training and testing data, we have to extract the columns with the mean and standard deviation of the values. In order to do that, we have to load the file with the column names, and find which columns contain the mean and std values. We do that with the following code.
+After creating the set with the training and testing data, we have to extract the columns with the mean and standard deviation of the values. In order to do that, we have to load the file with the column names, and find which columns contain the mean and std values. We do that with the following code,
 
 
 ```r
@@ -99,7 +99,7 @@ column_names <- read.table(fileName, sep= ' ', stringsAsFactors = F)
 column_position <- which(str_detect(column_names$V2, '\\b-mean()\\b|\\b-std()\\b'))
 ```
 
-After find the desired columns, we extract them from the original data set *set1* and create *set2*. We also name the columns in *set2*.
+After finding the desired columns, we extract them from the original data set *set1* and create *set2*. We also rename the columns in *set2*.
 
 
 ```r
@@ -128,7 +128,7 @@ set2$activity <- activity_labels[set2$activity.id, 2]
 set2$activity.id <- NULL
 ```
 
-Once we have labeled columns and activities, we can now start tidying the data. First we will average the values in the columns for each subject and activity in *set2*. Let's call the new set *set3*.
+Once we have labeled columns and activities, we can now start tidying up the data. First we will average the values in the columns for each subject and activity in *set2*. Let's call the new set *set3*.
 
 
 ```r
@@ -157,9 +157,9 @@ head(set4)
 ## 6       1   WALKING_UPSTAIRS tBodyAcc-mean()-X 0.2555
 ```
 
-We can see that values in the column variable include the parameters like t, f, mean, std, X, Y, Z, among others to specify the axis, statistic calculated, domain of measurement, among other variables. We can extract this information from those values and create appropriate columns to specify such parameters.  
+We can see that values in the column variable include parameters like t, f, mean, std, X, Y, Z, among others, to specify the axis, statistic calculated, domain of measurement, and other variables. We can extract this information from those values and create appropriate columns to specify such parameters.  
 
-First, let's create the columns that show if we the value corresponds to a mean, or std. 
+First, let's create the columns that show if a value corresponds to a mean or a standard deviation (std). 
 
 
 ```r
@@ -220,7 +220,7 @@ head(tidySet)
 ## 6       1   LAYING BodyAccJerk    Z -0.9481 -0.9606     frequency
 ```
 
-Now, we will create a column whose values show if a signal corresponds to a 'Body' or 'Gravity' measurement. To do this we first need to fix a typo in the values. To fix the typo, the word 'BodyBody' should be replaced by 'Body'.
+Now, we will create a column whose values show if a signal corresponds to a 'Body' or 'Gravity' acceleration. To do this we first need to fix a typo in the values. To fix the typo, the word 'BodyBody' should be replaced by 'Body'.
 
 
 ```r
@@ -288,7 +288,7 @@ head(tidySet)
 ## 6              Body Accelerometer
 ```
 
-The remaining values in the 'signal' column correspond to the calculated values of the main signals. Let's rename the 'signal' column with the 'calculated.signal', and the change abbreviated values to their full name
+The remaining values in the 'signal' column correspond to the calculated values of the main signals. Let's rename the 'signal' column with the 'calculated.signal', and change the abbreviated values to their full name
 
 
 ```r
