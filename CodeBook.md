@@ -90,7 +90,13 @@ After creating the set with the training and testing data, we have to extract th
 
 ```r
 require(stringr)
+```
 
+```
+## Loading required package: stringr
+```
+
+```r
 # Extract the information of the columns
 fileName <- 'features.txt'	
 column_names <- read.table(fileName, sep= ' ', stringsAsFactors = F)
@@ -134,8 +140,21 @@ Once we have labeled columns and activities, we can now start tidying up the dat
 ```r
 # Get average of variables for each activity and subject
 require(plyr)
-require(reshape2)
+```
 
+```
+## Loading required package: plyr
+```
+
+```r
+require(reshape2)
+```
+
+```
+## Loading required package: reshape2
+```
+
+```r
 set3 <- ddply(set2,c('subject','activity'), colwise(mean))
 ```
 
@@ -375,4 +394,12 @@ tail(tidySet)
 ## 5938              None          time    Z  0.08147 -0.21157
 ## 5939  Vector.Magnitude     frequency <NA> -0.44915 -0.15147
 ## 5940  Vector.Magnitude          time <NA> -0.11361 -0.16929
+```
+
+Finally, we save the tidy set in a text file.
+
+
+```r
+# Save tidySet in a text file
+write.table(tidySet, file = 'tidySet.txt', sep = '\t', na = 'NA', col.names = TRUE, row.names = FALSE, quote = FALSE)
 ```

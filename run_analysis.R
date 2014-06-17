@@ -163,3 +163,6 @@ tidySet <- tidySet[c('subject','activity', 'source', 'acceleration.type', 'calcu
 
 # Sort the rows
 tidySet <- arrange(tidySet, subject, activity, source, acceleration.type, calculated.signal, signal.domain, axis)
+
+# Save tidySet in a text file
+write.table(tidySet, file = 'tidySet.txt', sep = '\t', na = 'NA', col.names = TRUE, row.names = FALSE, quote = FALSE)
